@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Access Service</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .stat-box {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table thead {
+            background: #f3f4f6;
+        }
+
+        table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        table td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #666;
+        }
+
+        table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .status-badge-pending {
+            display: inline-block;
+            background: #fbbf24;
+            color: #78350f;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .status-badge-approved {
+            display: inline-block;
+            background: #d1fae5;
+            color: #065f46;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .status-badge-rejected {
+            display: inline-block;
+            background: #fee2e2;
+            color: #7f1d1d;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #7f1d1d;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .api-routes {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .api-routes h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .api-route {
+            background: white;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .method {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 10px;
+            width: 50px;
+            text-align: center;
+        }
+
+        footer {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #666;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Student Access Service</h1>
+            <p>Manage extension requests for student assignments</p>
+            <div class="status-badge">✓ System Healthy</div>
+        </header>
+
+        <div class="content">
+            <div class="card">
+                <h2>Dashboard</h2>
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-number" id="total-requests">-</div>
+                        <div class="stat-label">Total Requests</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="approved-count">-</div>
+                        <div class="stat-label">Approved</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="pending-count">-</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="total-days">-</div>
+                        <div class="stat-label">Total Days Granted</div>
+                    </div>
+                </div>
+                <button class="refresh-btn" onclick="loadRequests()">🔄 Refresh Data</button>
+            </div>
+
+            <div class="card">
+                <h2>API Endpoints</h2>
+                <div class="api-routes">
+                    <h3>Available Routes</h3>
+                    <div class="api-route">
+                        <span class="method">GET</span> /health
+                    </div>
+                    <div class="api-route">
+                        <span class="method">GET</span> /api/health
+                    </div>
+                    <div class="api-route">
+                        <span class="method">GET</span> /api/requests
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Extension Requests</h2>
+            <div id="requests-container">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Loading requests...
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Student Access Service • Powered by Docker</p>
+        </footer>
+    </div>
+
+    <script>
+        async function loadRequests() {
+            try {
+                const response = await fetch('/api/requests');
+                const data = await response.json();
+
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+
+                renderRequests(data);
+                updateStats(data);
+            } catch (error) {
+                showError('Failed to load requests: ' + error.message);
+            }
+        }
+
+        function renderRequests(requests) {
+            if (requests.length === 0) {
+                document.getElementById('requests-container').innerHTML = '<p style="text-align: center; color: #666;">No requests found</p>';
+                return;
+            }
+
+            let html = '<table>';
+            html += `
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Email</th>
+                        <th>Days Requested</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+
+            requests.forEach(req => {
+                const statusClass = `status-badge-${req.status.toLowerCase()}`;
+                const date = new Date(req.created_at).toLocaleDateString();
+                html += `
+                    <tr>
+                        <td><strong>${req.student_id}</strong></td>
+                        <td>${req.student_email}</td>
+                        <td><strong>${req.requested_days}</strong></td>
+                        <td>${req.reason}</td>
+                        <td><span class="${statusClass}">${capitalize(req.status)}</span></td>
+                        <td>${date}</td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('requests-container').innerHTML = html;
+        }
+
+        function updateStats(requests) {
+            const total = requests.length;
+            const approved = requests.filter(r => r.status === 'approved').length;
+            const pending = requests.filter(r => r.status === 'pending').length;
+            const totalDays = requests.reduce((sum, r) => sum + r.requested_days, 0);
+
+            document.getElementById('total-requests').textContent = total;
+            document.getElementById('approved-count').textContent = approved;
+            document.getElementById('pending-count').textContent = pending;
+            document.getElementById('total-days').textContent = totalDays;
+        }
+
+        function showError(message) {
+            document.getElementById('requests-container').innerHTML = `<div class="error">⚠️ ${message}</div>`;
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        // Load requests on page load
+        loadRequests();
+    </script>
+</body>
+</html>

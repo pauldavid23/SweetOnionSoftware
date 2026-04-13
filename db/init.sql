@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS extension_requests (
+CREATE TABLE IF NOT EXISTS student_extension_requests (
     id SERIAL PRIMARY KEY,
     student_id VARCHAR(50) NOT NULL,
     student_email VARCHAR(255) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS extension_requests (
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-INSERT INTO extension_requests (student_id, student_email, requested_days, reason, status)
+INSERT INTO student_extension_requests (student_id, student_email, requested_days, reason, status)
 VALUES
     ('STU-1001', 'alex@example.com', 7, 'Family emergency', 'pending'),
     ('STU-1002', 'jordan@example.com', 3, 'Medical appointment', 'approved'),

@@ -1,11 +1,11 @@
 import logging
 import os
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 logging.basicConfig(
@@ -28,17 +28,16 @@ def get_db_connection():
 
 @app.get("/")
 def index():
-    return jsonify(
-        {
-            "service": "student-access-service",
-            "status": "running",
-            "routes": ["/health", "/api/requests"],
-        }
-    )
+    return render_template('index.html')
 
 
 @app.get("/health")
 def health():
+    return jsonify({"status": "ok"}), 200
+
+
+@app.get("/api/health")
+def api_health():
     return jsonify({"status": "ok"}), 200
 
 
@@ -69,6 +68,6 @@ def list_requests():
 
 
 if __name__ == "__main__":
-    host = os.getenv("APP_HOST", "127.0.0.1")
+    host = os.getenv("APP_HOST", "0.0.0.0")
     port = int(os.getenv("APP_PORT", "8000"))
     app.run(host=host, port=port)
