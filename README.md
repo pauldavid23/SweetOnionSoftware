@@ -2,10 +2,10 @@
 
 1. docker compose ps 
 2. curl http://localhost:8080/api/health 
-3. Checking logs from each individual app
-	docker compose logs app
-	docker compose logs db
-	docker compose logs nginx
+3. Checking logs from each individual app such as: 
+	<li> docker compose logs app </li>
+	<li> docker compose logs db </li>
+	<li> docker compose logs nginx </li>
 
 **Bugs found:**
 1. Health check is failing due to api/health not found in app.py 
