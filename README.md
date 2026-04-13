@@ -53,25 +53,25 @@ chmod +x scripts/*.sh
 ### Submission expectations
 
 Please submit:
-	•	your code changes
-	•	a short SOLUTION.md explaining:
-	•	what was broken
-	•	how you found it
-	•	what you changed
-	•	what you would improve next
-	•	a short RUNBOOK.md with:
-	    •	how to start the stack
-	    •	how to verify it is working
-	    •	common troubleshooting steps
-	•	a short AI_USAGE.md describing:
-	    •	what AI tools you used, if any
-	    •	a few representative prompts
-	    •	how you verified the output before trusting it
+-	your code changes
+-	a short SOLUTION.md explaining:
+-	what was broken
+-	how you found it
+-	what you changed
+-	what you would improve next
+-	a short RUNBOOK.md with:
+    -	how to start the stack
+	-	how to verify it is working
+	-	common troubleshooting steps
+-	a short AI_USAGE.md describing:
+	-	what AI tools you used, if any
+	-	a few representative prompts
+	-	how you verified the output before trusting it
 
 Notes
-	•	You do not need to redesign the whole application.
-	•	Focus on practical, production-minded fixes.
-	•	Bonus points for improving operability, clarity, and safety.
+-	You do not need to redesign the whole application.
+-	Focus on practical, production-minded fixes.
+-	Bonus points for improving operability, clarity, and safety.
 
 ## `docker-compose.yml`
 
